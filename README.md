@@ -2,7 +2,6 @@ jMess
 =====
 A simple event driven messaging framework for javascript.
 
----
 ##Components##
 ###EventRegistry###
 This is the heart of the system, it allows you to raise and hook to events while passing messages through your system.
@@ -18,7 +17,6 @@ A little logging tool to allow for a console log stream of the events passing th
 ###LifeCycleEvents###
 These events give you access points to have logic run across all commands at different points in the life cycle.
 
----
 ##About the project##
 
 * Our project is written in typescript but compiled to target ECMAScript v5.
