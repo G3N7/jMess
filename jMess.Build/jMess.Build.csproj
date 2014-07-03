@@ -30,10 +30,12 @@
     <Content Include="Tests.html" />
     <Content Include="web.config" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+  	<TypeScriptCompile Include="EventRegistryTests.ts" />
+  </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="EventBarker.ts" />
     <TypeScriptCompile Include="EventRegistry.ts" />
-    <TypeScriptCompile Include="EventRegistryTests.ts" />
     <TypeScriptCompile Include="IEventRegistry.ts" />
     <TypeScriptCompile Include="ILogR.ts" />
     <TypeScriptCompile Include="LifeCycleEvents.ts" />
