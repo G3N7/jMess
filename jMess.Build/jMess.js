@@ -21,9 +21,9 @@
         };
 
         EventBarker.prototype.startBarking = function () {
-            this._eventRegistry.Hook(jMess.LifeCycleEvents.BeforeHook, this._beforeHook);
-            this._eventRegistry.Hook(jMess.LifeCycleEvents.BeforeRegister, this._beforeRegister);
-            this._eventRegistry.Hook(jMess.LifeCycleEvents.BeforeRaise, this._beforeRaise);
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeHook, this._beforeHook);
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRegister, this._beforeRegister);
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRaise, this._beforeRaise);
             this._logR.trace('woof.. woof.. event barker be a bark\'n');
         };
 

@@ -1,7 +1,7 @@
 ﻿module jMess {
 	//generally used for development
 	export class EventBarker {
-		private _eventRegistry;
+		private _eventRegistry: IEventRegistry;
 		private _logR: ILogR;
 
 		constructor(eventRegistry: IEventRegistry, logR: ILogR) {
@@ -25,9 +25,9 @@
 		}
 
 		public startBarking(): void {
-			this._eventRegistry.Hook(LifeCycleEvents.BeforeHook, this._beforeHook);
-			this._eventRegistry.Hook(LifeCycleEvents.BeforeRegister, this._beforeRegister);
-			this._eventRegistry.Hook(LifeCycleEvents.BeforeRaise, this._beforeRaise);
+			this._eventRegistry.hook(LifeCycleEvents.BeforeHook, this._beforeHook);
+			this._eventRegistry.hook(LifeCycleEvents.BeforeRegister, this._beforeRegister);
+			this._eventRegistry.hook(LifeCycleEvents.BeforeRaise, this._beforeRaise);
 			this._logR.trace('woof.. woof.. event barker be a bark\'n');
 		}
 
