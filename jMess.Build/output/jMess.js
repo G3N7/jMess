@@ -3,6 +3,7 @@
     var EventBarker = (function () {
         function EventBarker(eventRegistry, logR) {
             this._eventRegistry = eventRegistry;
+            this._logR = logR;
         }
         EventBarker.prototype._beforeHook = function (data) {
             if (!this._isInternalEvent(data[0])) {

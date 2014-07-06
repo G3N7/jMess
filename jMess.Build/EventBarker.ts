@@ -6,6 +6,7 @@
 
 		constructor(eventRegistry: IEventRegistry, logR: ILogR) {
 			this._eventRegistry = eventRegistry;
+			this._logR = logR;
 		}
 
 		private _beforeHook(data): void {
