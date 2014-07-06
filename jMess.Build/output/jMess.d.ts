@@ -3,9 +3,6 @@
         private _eventRegistry;
         private _logR;
         constructor(eventRegistry: IEventRegistry, logR: ILogR);
-        private _beforeHook(data);
-        private _beforeRaise(data);
-        private _beforeRegister(data);
         public startBarking(): void;
         private _isInternalEvent(args);
     }

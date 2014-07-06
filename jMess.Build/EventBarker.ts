@@ -9,27 +9,22 @@
 			this._logR = logR;
 		}
 
-		private _beforeHook(data): void {
-			if (!this._isInternalEvent(data[0])) {
-				this._logR.trace('Hooked: ', data);
-			}
-		}
-
-		private _beforeRaise(data): void {
-			if (!this._isInternalEvent(data[0])) {
-				this._logR.info('Raise: ', data);
-			}
-		}
-
-		private _beforeRegister(data): void {
-			this._logR.trace('Register: ', data);
-		}
-
 		public startBarking(): void {
-			this._eventRegistry.hook(LifeCycleEvents.BeforeHook, this._beforeHook);
-			this._eventRegistry.hook(LifeCycleEvents.BeforeRegister, this._beforeRegister);
-			this._eventRegistry.hook(LifeCycleEvents.BeforeRaise, this._beforeRaise);
-			this._logR.trace('woof.. woof.. event barker be a bark\'n');
+			var logger = this._logR;
+			this._eventRegistry.hook(LifeCycleEvents.BeforeRegister, (data) => {
+				logger.trace('Register: ', data);
+			});
+			this._eventRegistry.hook(LifeCycleEvents.BeforeHook, (data) => {
+				if (!this._isInternalEvent(data[0])) {
+					logger.trace('Hooked: ', data);
+				}
+			});
+			this._eventRegistry.hook(LifeCycleEvents.BeforeRaise, (data) => {
+				if (!this._isInternalEvent(data[0])) {
+					logger.info('Raise: ', data);
+				}
+			});
+			logger.trace('woof.. woof.. event barker be a bark\'n');
 		}
 
 		private _isInternalEvent(args): boolean {
@@ -41,6 +36,5 @@
 				|| args == LifeCycleEvents.AfterRaise
 				|| args == LifeCycleEvents.AfterRegister;
 		}
-
 	}
 }

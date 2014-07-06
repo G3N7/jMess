@@ -5,27 +5,23 @@
             this._eventRegistry = eventRegistry;
             this._logR = logR;
         }
-        EventBarker.prototype._beforeHook = function (data) {
-            if (!this._isInternalEvent(data[0])) {
-                this._logR.trace('Hooked: ', data);
-            }
-        };
-
-        EventBarker.prototype._beforeRaise = function (data) {
-            if (!this._isInternalEvent(data[0])) {
-                this._logR.info('Raise: ', data);
-            }
-        };
-
-        EventBarker.prototype._beforeRegister = function (data) {
-            this._logR.trace('Register: ', data);
-        };
-
         EventBarker.prototype.startBarking = function () {
-            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeHook, this._beforeHook);
-            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRegister, this._beforeRegister);
-            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRaise, this._beforeRaise);
-            this._logR.trace('woof.. woof.. event barker be a bark\'n');
+            var _this = this;
+            var logger = this._logR;
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRegister, function (data) {
+                logger.trace('Register: ', data);
+            });
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeHook, function (data) {
+                if (!_this._isInternalEvent(data[0])) {
+                    logger.trace('Hooked: ', data);
+                }
+            });
+            this._eventRegistry.hook(jMess.LifeCycleEvents.BeforeRaise, function (data) {
+                if (!_this._isInternalEvent(data[0])) {
+                    logger.info('Raise: ', data);
+                }
+            });
+            logger.trace('woof.. woof.. event barker be a bark\'n');
         };
 
         EventBarker.prototype._isInternalEvent = function (args) {
