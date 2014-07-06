@@ -34,13 +34,6 @@ declare module jMess {
         register(eventsToRegister: any): void;
     }
 }
-interface ILogR {
-    info(...args: any[]): void;
-    warn(...args: any[]): void;
-    error(...args: any[]): void;
-    trace(...args: any[]): void;
-    custom(...args: any[]): void;
-}
 declare module jMess {
     class LifeCycleEvents {
         static AfterRegister: string;
