@@ -25,6 +25,7 @@
     <Content Include="Scripts\jasmine\console.js" />
     <Content Include="Scripts\jasmine\jasmine-html.js" />
     <Content Include="Scripts\jasmine\jasmine.js" />
+    <Content Include="Scripts\LogR.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Tests.html" />
@@ -38,7 +39,7 @@
     <TypeScriptCompile Include="EventRegistry.ts" />
     <TypeScriptCompile Include="IEventRegistry.ts" />
     <TypeScriptCompile Include="LifeCycleEvents.ts" />
-    <TypeScriptCompile Include="LogR.d.ts" />
+    <TypeScriptCompile Include="Scripts\LogR.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jasmine\jasmine.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\underscore\underscore.d.ts" />
   </ItemGroup>
