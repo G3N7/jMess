@@ -41,7 +41,7 @@
                     return '\n' + x;
                 });
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise != jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 //CAUTION: infinite loop possible here
                 this.raise(jMess.LifeCycleEvents.BeforeRaise, arguments);
             }
@@ -61,7 +61,7 @@
 
             _.each(eventDelegates, asyncInvokation);
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise != jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 //CAUTION: infinite loop possible here
                 this.raise(jMess.LifeCycleEvents.AfterRaise, arguments);
             }
@@ -83,9 +83,11 @@
 
         EventRegistry.prototype._registerEventsObject = function (eventsObj) {
             for (var key in eventsObj) {
-                var value = eventsObj[key];
-                if (typeof value == "string") {
-                    this._registerSingleEvent(value);
+                if (eventsObj.hasOwnProperty(key)) {
+                    var value = eventsObj[key];
+                    if (typeof value == "string") {
+                        this._registerSingleEvent(value);
+                    }
                 }
             }
         };

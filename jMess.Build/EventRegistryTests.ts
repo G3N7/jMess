@@ -6,7 +6,7 @@
 	var eventRegistry: jMess.EventRegistry;
 	var mockLog: ILogR;
 	var someKnownEvent = 'someEvent';
-	beforeEach((done) => {
+	beforeEach((done: () => void) => {
 		var emptyCall = () => { return; };
 		mockLog = { info: emptyCall, custom: emptyCall, error: emptyCall, trace: emptyCall, warn: emptyCall };
 		eventRegistry = new jMess.EventRegistry(mockLog);
@@ -60,7 +60,7 @@
 		var someEventCalled: number;
 		var someOtherKnownEvent = 'someOtherEvent';
 		var someOtherEventCalled: boolean;
-		beforeEach((done) => {
+		beforeEach((done: () => void) => {
 			eventRegistry.register(someKnownEvent);
 			eventRegistry.register(someOtherKnownEvent);
 

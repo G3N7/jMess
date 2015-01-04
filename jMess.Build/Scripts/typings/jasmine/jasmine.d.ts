@@ -4,14 +4,16 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 
+// For ddescribe / iit use : https://github.com/borisyankov/DefinitelyTyped/blob/master/karma-jasmine/karma-jasmine.d.ts
+
 declare function describe(description: string, specDefinitions: () => void): void;
-declare function ddescribe(description: string, specDefinitions: () => void): void;
+declare function fdescribe(description: string, specDefinitions: () => void): void;
 declare function xdescribe(description: string, specDefinitions: () => void): void;
 
 declare function it(expectation: string, assertion?: () => void): void;
 declare function it(expectation: string, assertion?: (done: () => void) => void): void;
-declare function iit(expectation: string, assertion?: () => void): void;
-declare function iit(expectation: string, assertion?: (done: () => void) => void): void;
+declare function fit(expectation: string, assertion?: () => void): void;
+declare function fit(expectation: string, assertion?: (done: () => void) => void): void;
 declare function xit(expectation: string, assertion?: () => void): void;
 declare function xit(expectation: string, assertion?: (done: () => void) => void): void;
 
@@ -43,6 +45,7 @@ declare module jasmine {
     function createSpyObj<T>(baseName: string, methodNames: any[]): T;
     function pp(value: any): string;
     function getEnv(): Env;
+    function addMatchers(matchers: any): Any;
 
     interface Any {
 
@@ -98,13 +101,13 @@ declare module jasmine {
         addReporter(reporter: Reporter): void;
         execute(): void;
         describe(description: string, specDefinitions: () => void): Suite;
-        ddescribe(description: string, specDefinitions: () => void): Suite;
+        // ddescribe(description: string, specDefinitions: () => void): Suite; Not a part of jasmine. Angular team adds these
         beforeEach(beforeEachFunction: () => void): void;
         currentRunner(): Runner;
         afterEach(afterEachFunction: () => void): void;
         xdescribe(desc: string, specDefinitions: () => void): XSuite;
         it(description: string, func: () => void): Spec;
-        iit(description: string, func: () => void): Spec;
+        // iit(description: string, func: () => void): Spec; Not a part of jasmine. Angular team adds these
         xit(desc: string, func: () => void): XSpec;
         compareRegExps_(a: RegExp, b: RegExp, mismatchKeys: string[], mismatchValues: string[]): boolean;
         compareObjects_(a: any, b: any, mismatchKeys: string[], mismatchValues: string[]): boolean;
@@ -220,11 +223,8 @@ declare module jasmine {
         message(): any;
 
         toBe(expected: any): boolean;
-        toNotBe(expected: any): boolean;
         toEqual(expected: any): boolean;
-        toNotEqual(expected: any): boolean;
         toMatch(expected: any): boolean;
-        toNotMatch(expected: any): boolean;
         toBeDefined(): boolean;
         toBeUndefined(): boolean;
         toBeNull(): boolean;
@@ -232,10 +232,8 @@ declare module jasmine {
         toBeTruthy(): boolean;
         toBeFalsy(): boolean;
         toHaveBeenCalled(): boolean;
-        wasNotCalled(): boolean;
         toHaveBeenCalledWith(...params: any[]): boolean;
         toContain(expected: any): boolean;
-        toNotContain(expected: any): boolean;
         toBeLessThan(expected: any): boolean;
         toBeGreaterThan(expected: any): boolean;
         toBeCloseTo(expected: any, precision: any): boolean;
@@ -427,4 +425,5 @@ declare module jasmine {
 
     export var HtmlReporter: HtmlReporter;
     export var HtmlSpecFilter: HtmlSpecFilter;
+    export var DEFAULT_TIMEOUT_INTERVAL: number;
 }

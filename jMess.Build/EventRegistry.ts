@@ -28,13 +28,13 @@
 			}
 			this.raise(LifeCycleEvents.AfterHook, arguments);
 		}
-
+		
 		public raise(eventToRaise: string, data: Object): void {
 			if (eventToRaise == null) throw 'The event you provided to raise is null, are you sure you have defined the event?';
 			if (data == null) throw 'data was null, consumers of events should feel confident they will never get null data.';
 			if (!this._eventExists(eventToRaise)) throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
 
-			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise != LifeCycleEvents.AfterRaise) {
+			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
 				//CAUTION: infinite loop possible here
 				this.raise(LifeCycleEvents.BeforeRaise, arguments);
 			}
@@ -54,7 +54,7 @@
 
 			_.each(eventDelegates, asyncInvokation);
 
-			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise != LifeCycleEvents.AfterRaise) {
+			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
 				//CAUTION: infinite loop possible here
 				this.raise(LifeCycleEvents.AfterRaise, arguments);
 			}
@@ -75,9 +75,11 @@
 
 		private _registerEventsObject(eventsObj: Object) {
 			for (var key in eventsObj) {
-				var value = eventsObj[key];
-				if (typeof value == "string") {
-					this._registerSingleEvent(value);
+				if (eventsObj.hasOwnProperty(key)) {
+					var value = eventsObj[key];
+					if (typeof value == "string") {
+						this._registerSingleEvent(value);
+					}
 				}
 			}
 		}
