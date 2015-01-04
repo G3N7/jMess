@@ -33,11 +33,27 @@
 })(jMess || (jMess = {}));
 var jMess;
 (function (jMess) {
+    var LifeCycleEvents = (function () {
+        function LifeCycleEvents() {
+        }
+        LifeCycleEvents.AfterRegister = '__er_AfterRegisterEvent__';
+        LifeCycleEvents.BeforeRegister = '__er_BeforeRegisterEvent__';
+        LifeCycleEvents.AfterHook = '__er_AfterHookEvent__';
+        LifeCycleEvents.BeforeHook = '__er_BeforeHookEvent__';
+        LifeCycleEvents.AfterRaise = '__er_AfterRaiseEvent__';
+        LifeCycleEvents.BeforeRaise = '__er_BeforeRaiseEvent__';
+        return LifeCycleEvents;
+    })();
+    jMess.LifeCycleEvents = LifeCycleEvents;
+})(jMess || (jMess = {}));
+var jMess;
+(function (jMess) {
     var EventRegistry = (function () {
-        function EventRegistry(logR) {
+        function EventRegistry(logR, timeout) {
             this._events = _.clone(jMess.LifeCycleEvents);
             this._registry = {};
             this._logR = logR;
+            this._timeout = timeout ? timeout : setTimeout;
         }
         EventRegistry.prototype.getAvailableEvents = function () {
             var eventCopy = _.clone(this._events);
@@ -74,14 +90,14 @@ var jMess;
                     return '\n' + x;
                 });
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise != jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 this.raise(jMess.LifeCycleEvents.BeforeRaise, arguments);
             }
 
             var eventDelegates = this._registry[eventToRaise];
             var asyncInvokation = function (delegate) {
                 var logr = _this._logR;
-                setTimeout(function () {
+                _this._timeout.call(window, function () {
                     try  {
                         delegate(data);
                     } catch (ex) {
@@ -92,7 +108,7 @@ var jMess;
 
             _.each(eventDelegates, asyncInvokation);
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise != jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 this.raise(jMess.LifeCycleEvents.AfterRaise, arguments);
             }
         };
@@ -113,26 +129,28 @@ var jMess;
 
         EventRegistry.prototype._registerEventsObject = function (eventsObj) {
             for (var key in eventsObj) {
-                var value = eventsObj[key];
-                if (typeof value == "string") {
-                    this._registerSingleEvent(value);
+                if (eventsObj.hasOwnProperty(key)) {
+                    var value = eventsObj[key];
+                    if (typeof value == "string") {
+                        this._registerSingleEvent(value);
+                    }
                 }
             }
         };
 
         EventRegistry.prototype._registerArrayOfEvents = function (eventsArray) {
-            if (eventsArray.length == 0)
+            if (eventsArray.length === 0)
                 throw 'The array of events was empty :(';
             for (var i = 0; i < eventsArray.length; i++) {
                 var eventToRegister = eventsArray[i];
-                if (eventToRegister == '')
+                if (eventToRegister === '')
                     throw 'the event at ' + i + ' index was just an empty string :(';
                 this._registerSingleEvent(eventsArray[i]);
             }
         };
 
         EventRegistry.prototype._registerSingleEvent = function (eventToRegister) {
-            if (eventToRegister == '')
+            if (eventToRegister === '')
                 throw 'the event was just an empty string :(';
             if (this._eventExists(eventToRegister))
                 throw 'the event you are trying to register "' + eventToRegister + '" is already registered, either you are duplicating logic or need to be more specific in your event naming';
@@ -145,19 +163,4 @@ var jMess;
         return EventRegistry;
     })();
     jMess.EventRegistry = EventRegistry;
-})(jMess || (jMess = {}));
-var jMess;
-(function (jMess) {
-    var LifeCycleEvents = (function () {
-        function LifeCycleEvents() {
-        }
-        LifeCycleEvents.AfterRegister = '__er_AfterRegisterEvent__';
-        LifeCycleEvents.BeforeRegister = '__er_BeforeRegisterEvent__';
-        LifeCycleEvents.AfterHook = '__er_AfterHookEvent__';
-        LifeCycleEvents.BeforeHook = '__er_BeforeHookEvent__';
-        LifeCycleEvents.AfterRaise = '__er_AfterRaiseEvent__';
-        LifeCycleEvents.BeforeRaise = '__er_BeforeRaiseEvent__';
-        return LifeCycleEvents;
-    })();
-    jMess.LifeCycleEvents = LifeCycleEvents;
 })(jMess || (jMess = {}));
