@@ -1,13 +1,20 @@
-﻿module jMess {
+﻿/// <reference path="lifecycleevents.ts" />
+/// <reference path="scripts/logr.d.ts" />
+/// <reference path="ieventregistry.ts" />
+
+// ReSharper disable once InconsistentNaming
+module jMess {
 	export class EventRegistry implements IEventRegistry {
 		private _events: Object;
 		private _registry: Object;
 		private _logR: ILogR;
+		private _timeout: (delegate: () => void, delay: number) => void;
 
-		constructor(logR: ILogR) {
+		constructor(logR: ILogR, timeout?: (delegate: () => void, delay: number) => void) {
 			this._events = _.clone(LifeCycleEvents);
 			this._registry = {};
 			this._logR = logR;
+			this._timeout = timeout ? timeout : setTimeout;
 		}
 
 		public getAvailableEvents(): string[] {
@@ -28,13 +35,13 @@
 			}
 			this.raise(LifeCycleEvents.AfterHook, arguments);
 		}
-		
+
 		public raise(eventToRaise: string, data: Object): void {
 			if (eventToRaise == null) throw 'The event you provided to raise is null, are you sure you have defined the event?';
 			if (data == null) throw 'data was null, consumers of events should feel confident they will never get null data.';
 			if (!this._eventExists(eventToRaise)) throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
 
-			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
+			if (eventToRaise !== LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
 				//CAUTION: infinite loop possible here
 				this.raise(LifeCycleEvents.BeforeRaise, arguments);
 			}
@@ -42,7 +49,7 @@
 			var eventDelegates = this._registry[eventToRaise];
 			var asyncInvokation = (delegate) => {
 				var logr = this._logR;
-				setTimeout(() => {
+				this._timeout.call(window, () => {
 					try {
 						delegate(data);
 					} catch (ex) {
@@ -54,7 +61,7 @@
 
 			_.each(eventDelegates, asyncInvokation);
 
-			if (eventToRaise != LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
+			if (eventToRaise !== LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
 				//CAUTION: infinite loop possible here
 				this.raise(LifeCycleEvents.AfterRaise, arguments);
 			}
@@ -85,16 +92,16 @@
 		}
 
 		private _registerArrayOfEvents(eventsArray: string[]) {
-			if (eventsArray.length == 0) throw 'The array of events was empty :(';
+			if (eventsArray.length === 0) throw 'The array of events was empty :(';
 			for (var i = 0; i < eventsArray.length; i++) {
 				var eventToRegister = eventsArray[i];
-				if (eventToRegister == '') throw 'the event at ' + i + ' index was just an empty string :(';
+				if (eventToRegister === '') throw 'the event at ' + i + ' index was just an empty string :(';
 				this._registerSingleEvent(eventsArray[i]);
 			}
 		}
 
 		private _registerSingleEvent(eventToRegister: string) {
-			if (eventToRegister == '') throw 'the event was just an empty string :(';
+			if (eventToRegister === '') throw 'the event was just an empty string :(';
 			if (this._eventExists(eventToRegister)) throw 'the event you are trying to register "' + eventToRegister + '" is already registered, either you are duplicating logic or need to be more specific in your event naming';
 			this._events[eventToRegister] = eventToRegister;
 		}

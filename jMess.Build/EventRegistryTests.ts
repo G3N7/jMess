@@ -1,4 +1,8 @@
-﻿describe('EventRegistry', () => {
+﻿/// <reference path="eventregistry.ts" />
+/// <reference path="scripts/typings/jasmine/jasmine.d.ts" />
+/// <reference path="scripts/typings/underscore/underscore.d.ts" />
+
+describe('EventRegistry', () => {
 	it('exists', () => {
 		expect(jMess.EventRegistry).toBeDefined();
 	});

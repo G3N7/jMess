@@ -1,4 +1,5 @@
-﻿module jMess {
+﻿// ReSharper disable once InconsistentNaming
+module jMess {
 	//generally used for development
 	export class EventBarker {
 		private _eventRegistry: IEventRegistry;

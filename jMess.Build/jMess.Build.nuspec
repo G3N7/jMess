@@ -14,7 +14,7 @@
 		<tags>typescript javascript eventing</tags>
 		<dependencies>
 			<group>
-				<dependency id="LogR.js" version="1.0.2.0" />
+				<dependency id="LogR.js" version="1.0.3.0" />
 				<dependency id="underscore.js" version="1.7.0" />
 			</group>
 		</dependencies>

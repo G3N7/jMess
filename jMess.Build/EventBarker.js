@@ -1,4 +1,5 @@
-﻿var jMess;
+﻿// ReSharper disable once InconsistentNaming
+var jMess;
 (function (jMess) {
     //generally used for development
     var EventBarker = (function () {

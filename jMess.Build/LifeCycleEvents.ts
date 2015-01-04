@@ -1,4 +1,5 @@
-﻿module jMess {
+﻿// ReSharper disable once InconsistentNaming
+module jMess {
 	export class LifeCycleEvents {
 		// ReSharper disable InconsistentNaming
 		static AfterRegister = '__er_AfterRegisterEvent__';

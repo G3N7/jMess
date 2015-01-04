@@ -1,10 +1,15 @@
-﻿var jMess;
+﻿/// <reference path="lifecycleevents.ts" />
+/// <reference path="scripts/logr.d.ts" />
+/// <reference path="ieventregistry.ts" />
+// ReSharper disable once InconsistentNaming
+var jMess;
 (function (jMess) {
     var EventRegistry = (function () {
-        function EventRegistry(logR) {
+        function EventRegistry(logR, timeout) {
             this._events = _.clone(jMess.LifeCycleEvents);
             this._registry = {};
             this._logR = logR;
+            this._timeout = timeout ? timeout : setTimeout;
         }
         EventRegistry.prototype.getAvailableEvents = function () {
             var eventCopy = _.clone(this._events);
@@ -41,7 +46,7 @@
                     return '\n' + x;
                 });
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 //CAUTION: infinite loop possible here
                 this.raise(jMess.LifeCycleEvents.BeforeRaise, arguments);
             }
@@ -49,7 +54,7 @@
             var eventDelegates = this._registry[eventToRaise];
             var asyncInvokation = function (delegate) {
                 var logr = _this._logR;
-                setTimeout(function () {
+                _this._timeout.call(window, function () {
                     try  {
                         delegate(data);
                     } catch (ex) {
@@ -61,7 +66,7 @@
 
             _.each(eventDelegates, asyncInvokation);
 
-            if (eventToRaise != jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
+            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
                 //CAUTION: infinite loop possible here
                 this.raise(jMess.LifeCycleEvents.AfterRaise, arguments);
             }
@@ -93,18 +98,18 @@
         };
 
         EventRegistry.prototype._registerArrayOfEvents = function (eventsArray) {
-            if (eventsArray.length == 0)
+            if (eventsArray.length === 0)
                 throw 'The array of events was empty :(';
             for (var i = 0; i < eventsArray.length; i++) {
                 var eventToRegister = eventsArray[i];
-                if (eventToRegister == '')
+                if (eventToRegister === '')
                     throw 'the event at ' + i + ' index was just an empty string :(';
                 this._registerSingleEvent(eventsArray[i]);
             }
         };
 
         EventRegistry.prototype._registerSingleEvent = function (eventToRegister) {
-            if (eventToRegister == '')
+            if (eventToRegister === '')
                 throw 'the event was just an empty string :(';
             if (this._eventExists(eventToRegister))
                 throw 'the event you are trying to register "' + eventToRegister + '" is already registered, either you are duplicating logic or need to be more specific in your event naming';
