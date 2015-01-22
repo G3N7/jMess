@@ -109,6 +109,10 @@ var jMess;
         };
 
         EventRegistry.prototype._registerSingleEvent = function (eventToRegister) {
+            if (typeof eventToRegister !== 'string') {
+                this._logR.warn('The event being registered is not a string, its value is ', eventToRegister);
+                return;
+            }
             if (eventToRegister === '')
                 throw 'the event was just an empty string :(';
             if (this._eventExists(eventToRegister))

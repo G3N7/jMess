@@ -100,7 +100,11 @@ module jMess {
 			}
 		}
 
-		private _registerSingleEvent(eventToRegister: string) {
+        private _registerSingleEvent(eventToRegister: string) {
+            if (typeof eventToRegister !== 'string') {
+                this._logR.warn('The event being registered is not a string, its value is ', eventToRegister);
+                return;
+            }
 			if (eventToRegister === '') throw 'the event was just an empty string :(';
 			if (this._eventExists(eventToRegister)) throw 'the event you are trying to register "' + eventToRegister + '" is already registered, either you are duplicating logic or need to be more specific in your event naming';
 			this._events[eventToRegister] = eventToRegister;
