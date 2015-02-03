@@ -22,7 +22,7 @@ module jMess {
 			return _.values(eventCopy);
 		}
 
-		public hook(eventToHook: string, delegate: Function): void {
+		public hook(eventToHook: string, delegate: Function): () => void {
 			if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
 			if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
 			if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
@@ -34,6 +34,14 @@ module jMess {
 				this._registry[eventToHook].push(delegate);
 			}
 			this.raise(LifeCycleEvents.AfterHook, arguments);
+
+			var cancelation = ((r, e, d) => {
+				return () => {
+					var indexOfDelegate = r[e].indexOf(d);
+					r[e].splice(indexOfDelegate, 1);
+				};
+			})(this._registry, eventToHook, delegate);
+			return cancelation;
 		}
 
 		public raise(eventToRaise: string, data: Object): void {
@@ -46,7 +54,6 @@ module jMess {
 				this.raise(LifeCycleEvents.BeforeRaise, arguments);
 			}
 
-			var eventDelegates = this._registry[eventToRaise];
 			var asyncInvokation = (delegate) => {
 				var logr = this._logR;
 				this._timeout.call(window, () => {
@@ -59,6 +66,7 @@ module jMess {
 				}, 100);
 			};
 
+			var eventDelegates = this._registry[eventToRaise];
 			_.each(eventDelegates, asyncInvokation);
 
 			if (eventToRaise !== LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
@@ -100,11 +108,11 @@ module jMess {
 			}
 		}
 
-        private _registerSingleEvent(eventToRegister: string) {
-            if (typeof eventToRegister !== 'string') {
-                this._logR.warn('The event being registered is not a string, its value is ', eventToRegister);
-                return;
-            }
+		private _registerSingleEvent(eventToRegister: string) {
+			if (typeof eventToRegister !== 'string') {
+				this._logR.warn('The event being registered is not a string, its value is ', eventToRegister);
+				return;
+			}
 			if (eventToRegister === '') throw 'the event was just an empty string :(';
 			if (this._eventExists(eventToRegister)) throw 'the event you are trying to register "' + eventToRegister + '" is already registered, either you are duplicating logic or need to be more specific in your event naming';
 			this._events[eventToRegister] = eventToRegister;

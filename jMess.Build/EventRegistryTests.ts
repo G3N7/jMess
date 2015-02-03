@@ -64,22 +64,31 @@ describe('EventRegistry', () => {
 		var someEventCalled: number;
 		var someOtherKnownEvent = 'someOtherEvent';
 		var someOtherEventCalled: boolean;
+		var canceledEventCalled: boolean;
 		beforeEach((done: () => void) => {
 			eventRegistry.register(someKnownEvent);
 			eventRegistry.register(someOtherKnownEvent);
 
 			someEventCalled = 0;
 			someOtherEventCalled = false;
+			canceledEventCalled = false;
 
 			eventRegistry.hook(someKnownEvent, () => { someEventCalled++; done(); });
 			eventRegistry.hook(someOtherKnownEvent, () => { someOtherEventCalled = true; done(); });
 
+			var cancelation = eventRegistry.hook(someKnownEvent, () => { canceledEventCalled = true; done(); });
+			cancelation();
+			
 			eventRegistry.raise(someKnownEvent, {});
-
 		});
 
 		it('hook will register a method that can be invoked later', (done) => {
 			expect(someEventCalled).toBe(1);
+			done();
+		});
+
+		it('hook will return a cancelation fuction that will remove the hook created.', (done) => {
+			expect(canceledEventCalled).toBe(false);
 			done();
 		});
 

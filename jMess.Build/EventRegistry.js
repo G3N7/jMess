@@ -33,6 +33,14 @@ var jMess;
                 this._registry[eventToHook].push(delegate);
             }
             this.raise(jMess.LifeCycleEvents.AfterHook, arguments);
+
+            var cancelation = (function (r, e, d) {
+                return function () {
+                    var indexOfDelegate = r[e].indexOf(d);
+                    r[e].splice(indexOfDelegate, 1);
+                };
+            })(this._registry, eventToHook, delegate);
+            return cancelation;
         };
 
         EventRegistry.prototype.raise = function (eventToRaise, data) {
@@ -51,7 +59,6 @@ var jMess;
                 this.raise(jMess.LifeCycleEvents.BeforeRaise, arguments);
             }
 
-            var eventDelegates = this._registry[eventToRaise];
             var asyncInvokation = function (delegate) {
                 var logr = _this._logR;
                 _this._timeout.call(window, function () {
@@ -64,6 +71,7 @@ var jMess;
                 }, 100);
             };
 
+            var eventDelegates = this._registry[eventToRaise];
             _.each(eventDelegates, asyncInvokation);
 
             if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {

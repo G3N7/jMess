@@ -21,7 +21,7 @@ declare module jMess {
 declare module jMess {
     interface IEventRegistry {
         getAvailableEvents(): string[];
-        hook(eventName: string, onRaise: Function): void;
+        hook(eventName: string, onRaise: Function): () => void;
         raise(eventToRaise: string, data: Object): void;
         register(eventsToRegister: any): void;
     }
@@ -34,7 +34,7 @@ declare module jMess {
         private _timeout;
         constructor(logR: ILogR, timeout?: (delegate: () => void, delay: number) => void);
         public getAvailableEvents(): string[];
-        public hook(eventToHook: string, delegate: Function): void;
+        public hook(eventToHook: string, delegate: Function): () => void;
         public raise(eventToRaise: string, data: Object): void;
         public register(eventsToRegister: any): void;
         private _registerEventsObject(eventsObj);
