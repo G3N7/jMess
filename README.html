@@ -1,4 +1,4 @@
-<h1>jMess</h1>
+﻿<h1>jMess</h1>
 
 <p>A simple event driven messaging framework for javascript.</p>
 
@@ -9,7 +9,7 @@
 <p>This is the heart of the system, it allows you to raise and hook to events while passing messages through your system.</p>
 
 <ul>
-<li><code>hook(eventName: string, onRaise: Function): void</code> - will register a delegate to be invoked upon raising the event.</li>
+<li><code>hook(eventName: string, onRaise: Function): () =&gt; void</code> - will register a delegate to be invoked upon raising the event and then return a cancelation function that can be called to remove the hook that was just registered.</li>
 <li><code>raise(eventToRaise: string, data: Object): void</code> - will raise an event passing the expected data along to each of the delegates registered to the event.</li>
 <li><code>register(eventsToRegister: string/Object/string[]): void</code> - allows you to register events, although this step may seem unnecessary i have found it very useful in diagnosing typos in event names.</li>
 <li><code>getAvailableEvents(): string[]</code> - allows you to see all currently registered events, this is mostly used for diagnostics.</li>

@@ -6,7 +6,7 @@ A simple event driven messaging framework for javascript.
 ###EventRegistry###
 This is the heart of the system, it allows you to raise and hook to events while passing messages through your system.
 
-* `hook(eventName: string, onRaise: Function): void` - will register a delegate to be invoked upon raising the event.
+* `hook(eventName: string, onRaise: Function): () => void` - will register a delegate to be invoked upon raising the event and then return a cancelation function that can be called to remove the hook that was just registered.
 * `raise(eventToRaise: string, data: Object): void` - will raise an event passing the expected data along to each of the delegates registered to the event.
 * `register(eventsToRegister: string/Object/string[]): void` - allows you to register events, although this step may seem unnecessary i have found it very useful in diagnosing typos in event names.
 * `getAvailableEvents(): string[]` - allows you to see all currently registered events, this is mostly used for diagnostics.
