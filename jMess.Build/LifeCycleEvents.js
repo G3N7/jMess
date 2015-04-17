@@ -1,18 +1,15 @@
 // ReSharper disable once InconsistentNaming
 var jMess;
 (function (jMess) {
-    var LifeCycleEvents = (function () {
-        function LifeCycleEvents() {
-        }
+    var lifeCycleEvents = {
         // ReSharper disable InconsistentNaming
-        LifeCycleEvents.AfterRegister = '__er_AfterRegisterEvent__';
-        LifeCycleEvents.BeforeRegister = '__er_BeforeRegisterEvent__';
-        LifeCycleEvents.AfterHook = '__er_AfterHookEvent__';
-        LifeCycleEvents.BeforeHook = '__er_BeforeHookEvent__';
-        LifeCycleEvents.AfterRaise = '__er_AfterRaiseEvent__';
-        LifeCycleEvents.BeforeRaise = '__er_BeforeRaiseEvent__';
-        return LifeCycleEvents;
-    })();
-    jMess.LifeCycleEvents = LifeCycleEvents;
+        AfterRegister: '__er_AfterRegisterEvent__',
+        BeforeRegister: '__er_BeforeRegisterEvent__',
+        AfterHook: '__er_AfterHookEvent__',
+        BeforeHook: '__er_BeforeHookEvent__',
+        AfterRaise: '__er_AfterRaiseEvent__',
+        BeforeRaise: '__er_BeforeRaiseEvent__',
+    };
+    jMess.LifeCycleEvents = lifeCycleEvents;
 })(jMess || (jMess = {}));
 //# sourceMappingURL=lifecycleevents.js.map
