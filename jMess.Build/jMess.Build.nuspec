@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>jMess</id>
-		<version>1.1.1.0</version>
+		<version>1.2.0.0</version>
 		<title>jMess</title>
 		<authors>Mitch Ferrer</authors>
 		<owners>Mitch Ferrer</owners>
@@ -15,7 +15,7 @@
 		<dependencies>
 			<group>
 				<dependency id="LogR.js" version="1.0.2.0" />
-				<dependency id="underscore.js" version="1.7.0" />
+				<dependency id="underscore.js" version="1.8.2" />
 			</group>
 		</dependencies>
 	</metadata>
