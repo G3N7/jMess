@@ -1,8 +1,4 @@
-﻿/// <reference path="lifecycleevents.ts" />
-/// <reference path="scripts/logr.d.ts" />
-/// <reference path="ieventregistry.ts" />
-
-// ReSharper disable once InconsistentNaming
+﻿// ReSharper disable once InconsistentNaming
 module jMess {
 	export class EventRegistry implements IEventRegistry {
 		private _events: Object;
@@ -11,7 +7,7 @@ module jMess {
 		private _timeout: (delegate: () => void, delay: number) => void;
 
 		constructor(logR: ILogR, timeout?: (delegate: () => void, delay: number) => void) {
-			this._events = _.clone(LifeCycleEvents);
+			this._events = {};
 			this._registry = {};
 			this._logR = logR;
 			this._timeout = timeout ? timeout : setTimeout;
@@ -26,16 +22,15 @@ module jMess {
 			if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
 			if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
 			if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
-			this.raise(LifeCycleEvents.BeforeHook, arguments);
+
+            this._logR.trace('Hooking: ', eventToHook);
 
 			if (this._registry[eventToHook] == null) {
 				this._registry[eventToHook] = [delegate];
 			} else {
 				this._registry[eventToHook].push(delegate);
 			}
-			this.raise(LifeCycleEvents.AfterHook, arguments);
-
-			var cancelation = ((r, e, d) => {
+            var cancelation = ((r, e, d) => {
 				return () => {
 					var indexOfDelegate = r[e].indexOf(d);
 					r[e].splice(indexOfDelegate, 1);
@@ -49,10 +44,7 @@ module jMess {
 			if (data == null) throw 'data was null, consumers of events should feel confident they will never get null data.';
 			if (!this._eventExists(eventToRaise)) throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
 
-			if (eventToRaise !== LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
-				//CAUTION: infinite loop possible here
-				this.raise(LifeCycleEvents.BeforeRaise, arguments);
-			}
+            this._logR.info('Raise: ', data);
 
 			var asyncInvokation = (delegate) => {
 				var logr = this._logR;
@@ -68,24 +60,20 @@ module jMess {
 
 			var eventDelegates = this._registry[eventToRaise];
 			_.each(eventDelegates, asyncInvokation);
-
-			if (eventToRaise !== LifeCycleEvents.BeforeRaise && eventToRaise !== LifeCycleEvents.AfterRaise) {
-				//CAUTION: infinite loop possible here
-				this.raise(LifeCycleEvents.AfterRaise, arguments);
-			}
 		}
 
-		public register(eventsToRegister: any): void {
-			if (eventsToRegister == null) throw 'Your events where null, we must have something';
-			this.raise(LifeCycleEvents.BeforeRegister, arguments);
-			if (eventsToRegister instanceof Array) {
-				this._registerArrayOfEvents(eventsToRegister);
-			} else if (eventsToRegister instanceof Object) {
+		public register(eventsToRegister: string|string[]|Object): void {
+            if (eventsToRegister == null) throw 'Your events where null, we must have something';
+
+            this._logR.trace('Register: ', eventsToRegister);
+
+			if (<any>eventsToRegister instanceof Array) {
+				this._registerArrayOfEvents(<string[]>eventsToRegister);
+            } else if (<any>eventsToRegister instanceof Object) {
 				this._registerEventsObject(eventsToRegister);
 			} else {
-				this._registerSingleEvent(eventsToRegister);
+				this._registerSingleEvent(<string>eventsToRegister);
 			}
-			this.raise(LifeCycleEvents.AfterRegister, arguments);
 		}
 
 		private _registerEventsObject(eventsObj: Object) {

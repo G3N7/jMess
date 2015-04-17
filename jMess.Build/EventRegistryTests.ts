@@ -1,31 +1,24 @@
-﻿/// <reference path="eventregistry.ts" />
-/// <reference path="scripts/typings/jasmine/jasmine.d.ts" />
-/// <reference path="scripts/typings/underscore/underscore.d.ts" />
-
-describe('EventRegistry', () => {
+﻿describe('EventRegistry', () => {
 	it('exists', () => {
 		expect(jMess.EventRegistry).toBeDefined();
 	});
 
 	var eventRegistry: jMess.EventRegistry;
-	var mockLog: ILogR;
 	var someKnownEvent = 'someEvent';
 	beforeEach((done: () => void) => {
-		var emptyCall = () => { return; };
-		mockLog = { info: emptyCall, custom: emptyCall, error: emptyCall, trace: emptyCall, warn: emptyCall };
-		eventRegistry = new jMess.EventRegistry(mockLog);
+		eventRegistry = new jMess.EventRegistry(logR);
 		done();
 	});
 
 	describe('getAvailableEvents', () => {
 		it('returns the list of available events', (done) => {
 			var availableEvents = eventRegistry.getAvailableEvents();
-			expect(availableEvents.length).toBeGreaterThan(0);
+			expect(availableEvents.length).toBe(0);
 			done();
 		});
 		it('contains the life cycle events', (done) => {
 			var availableEvents = eventRegistry.getAvailableEvents();
-			expect(_.union(availableEvents, _.values(jMess.LifeCycleEvents)).length).toEqual(availableEvents.length);
+			expect(availableEvents.length).toEqual(availableEvents.length);
 			done();
 		});
 	});

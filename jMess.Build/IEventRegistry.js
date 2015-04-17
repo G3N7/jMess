@@ -1,1 +1,1 @@
-//# sourceMappingURL=ieventregistry.js.map
+//# sourceMappingURL=IEventRegistry.js.map

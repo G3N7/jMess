@@ -1,12 +1,9 @@
-/// <reference path="lifecycleevents.ts" />
-/// <reference path="scripts/logr.d.ts" />
-/// <reference path="ieventregistry.ts" />
 // ReSharper disable once InconsistentNaming
 var jMess;
 (function (jMess) {
     var EventRegistry = (function () {
         function EventRegistry(logR, timeout) {
-            this._events = _.clone(jMess.LifeCycleEvents);
+            this._events = {};
             this._registry = {};
             this._logR = logR;
             this._timeout = timeout ? timeout : setTimeout;
@@ -22,14 +19,13 @@ var jMess;
                 throw 'You must provide an delegate to run when the event is raised';
             if (!this._eventExists(eventToHook))
                 throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), function (x) { return '\n' + x; });
-            this.raise(jMess.LifeCycleEvents.BeforeHook, arguments);
+            this._logR.trace('Hooking: ', eventToHook);
             if (this._registry[eventToHook] == null) {
                 this._registry[eventToHook] = [delegate];
             }
             else {
                 this._registry[eventToHook].push(delegate);
             }
-            this.raise(jMess.LifeCycleEvents.AfterHook, arguments);
             var cancelation = (function (r, e, d) {
                 return function () {
                     var indexOfDelegate = r[e].indexOf(d);
@@ -46,10 +42,7 @@ var jMess;
                 throw 'data was null, consumers of events should feel confident they will never get null data.';
             if (!this._eventExists(eventToRaise))
                 throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), function (x) { return '\n' + x; });
-            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
-                //CAUTION: infinite loop possible here
-                this.raise(jMess.LifeCycleEvents.BeforeRaise, arguments);
-            }
+            this._logR.info('Raise: ', data);
             var asyncInvokation = function (delegate) {
                 var logr = _this._logR;
                 _this._timeout.call(window, function () {
@@ -63,15 +56,11 @@ var jMess;
             };
             var eventDelegates = this._registry[eventToRaise];
             _.each(eventDelegates, asyncInvokation);
-            if (eventToRaise !== jMess.LifeCycleEvents.BeforeRaise && eventToRaise !== jMess.LifeCycleEvents.AfterRaise) {
-                //CAUTION: infinite loop possible here
-                this.raise(jMess.LifeCycleEvents.AfterRaise, arguments);
-            }
         };
         EventRegistry.prototype.register = function (eventsToRegister) {
             if (eventsToRegister == null)
                 throw 'Your events where null, we must have something';
-            this.raise(jMess.LifeCycleEvents.BeforeRegister, arguments);
+            this._logR.trace('Register: ', eventsToRegister);
             if (eventsToRegister instanceof Array) {
                 this._registerArrayOfEvents(eventsToRegister);
             }
@@ -81,7 +70,6 @@ var jMess;
             else {
                 this._registerSingleEvent(eventsToRegister);
             }
-            this.raise(jMess.LifeCycleEvents.AfterRegister, arguments);
         };
         EventRegistry.prototype._registerEventsObject = function (eventsObj) {
             for (var key in eventsObj) {
@@ -121,4 +109,4 @@ var jMess;
     })();
     jMess.EventRegistry = EventRegistry;
 })(jMess || (jMess = {}));
-//# sourceMappingURL=eventregistry.js.map
+//# sourceMappingURL=EventRegistry.js.map
