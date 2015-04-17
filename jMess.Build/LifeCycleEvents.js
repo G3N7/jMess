@@ -1,9 +1,10 @@
-﻿// ReSharper disable once InconsistentNaming
+// ReSharper disable once InconsistentNaming
 var jMess;
 (function (jMess) {
     var LifeCycleEvents = (function () {
         function LifeCycleEvents() {
         }
+        // ReSharper disable InconsistentNaming
         LifeCycleEvents.AfterRegister = '__er_AfterRegisterEvent__';
         LifeCycleEvents.BeforeRegister = '__er_BeforeRegisterEvent__';
         LifeCycleEvents.AfterHook = '__er_AfterHookEvent__';
@@ -14,4 +15,4 @@ var jMess;
     })();
     jMess.LifeCycleEvents = LifeCycleEvents;
 })(jMess || (jMess = {}));
-//# sourceMappingURL=LifeCycleEvents.js.map
+//# sourceMappingURL=lifecycleevents.js.map

@@ -1,4 +1,4 @@
-﻿// ReSharper disable once InconsistentNaming
+// ReSharper disable once InconsistentNaming
 var jMess;
 (function (jMess) {
     //generally used for development
@@ -25,7 +25,6 @@ var jMess;
             });
             logger.trace('woof.. woof.. event barker be a bark\'n');
         };
-
         EventBarker.prototype._isInternalEvent = function (args) {
             //perf: we could arrange these with some heuristics based around number of actual events barked out to the logger.
             return args == jMess.LifeCycleEvents.BeforeHook || args == jMess.LifeCycleEvents.BeforeRaise || args == jMess.LifeCycleEvents.BeforeRegister || args == jMess.LifeCycleEvents.AfterHook || args == jMess.LifeCycleEvents.AfterRaise || args == jMess.LifeCycleEvents.AfterRegister;
