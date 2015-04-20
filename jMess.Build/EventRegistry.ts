@@ -46,7 +46,7 @@ module jMess {
             if (data == null) throw 'data was null, consumers of events should feel confident they will never get null data.';
             if (!this._eventExists(eventToRaise)) throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
 
-            this._logR.info('Raise: ', data);
+            this._logR.info('Raise: ', eventToRaise, data);
 
             var asyncInvokation = (delegate) => {
                 var logr = this._logR;
