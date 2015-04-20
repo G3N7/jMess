@@ -5,7 +5,9 @@ describe('EventRegistry', function () {
     var eventRegistry;
     var someKnownEvent = 'someEvent';
     beforeEach(function (done) {
-        eventRegistry = new jMess.EventRegistry(logR);
+        eventRegistry = new jMess.EventRegistry(logR, function (eventBeingRaised, data) {
+            console.log(eventBeingRaised, data);
+        });
         done();
     });
     describe('getAvailableEvents', function () {

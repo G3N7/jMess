@@ -1,10 +1,11 @@
 var jMess;
 (function (jMess) {
     var EventRegistry = (function () {
-        function EventRegistry(logR, timeout) {
+        function EventRegistry(logR, onRaise, timeout) {
             this._events = {};
             this._registry = {};
             this._logR = logR;
+            this._onRaise = onRaise;
             this._timeout = timeout ? timeout : setTimeout;
         }
         EventRegistry.prototype.getAvailableEvents = function () {
@@ -55,6 +56,9 @@ var jMess;
             };
             var eventDelegates = this._registry[eventToRaise];
             _.each(eventDelegates, asyncInvokation);
+            this._timeout.call(window, function () {
+                _this._onRaise(eventToRaise, data);
+            });
         };
         EventRegistry.prototype.register = function (eventsToRegister) {
             if (eventsToRegister == null)
