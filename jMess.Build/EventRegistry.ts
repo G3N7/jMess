@@ -20,12 +20,16 @@ module jMess {
             return _.values(eventCopy);
         }
 
+        public getHooksForEvent(eventName: string): Function[] {
+            return this._registry[eventName];
+        }
+
         public hook(eventToHook: string, delegate: Function): () => void {
             if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
             if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
             if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
 
-            this._logR.trace('Hooking: ', eventToHook);
+            this._logR.trace('Registering hook: ', eventToHook);
 
             if (this._registry[eventToHook] == null) {
                 this._registry[eventToHook] = [delegate];
@@ -34,11 +38,37 @@ module jMess {
             }
             var cancelation = ((r, e, d) => {
                 return () => {
+                    logR.trace("Removing hook: ", e);
                     var indexOfDelegate = r[e].indexOf(d);
                     r[e].splice(indexOfDelegate, 1);
                 };
             })(this._registry, eventToHook, delegate);
             return cancelation;
+        }
+
+        public hookOnce(eventToHook: string, delegate: Function) {
+            if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
+            if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
+            if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
+
+            if (this._registry[eventToHook] == null) {
+                this._registry[eventToHook] = new Array();
+            }
+
+            var indexOfDelegate = this._registry[eventToHook].length;
+            this._logR.trace('Registering hook ' + eventToHook + "[" + indexOfDelegate + "]");
+
+            var cancelation = ((r, e, i) => {
+                return () => {
+                    logR.trace("Removing hook " + e + "[" + indexOfDelegate + "]");
+                    r[e].splice(i, 1);
+                };
+            })(this._registry, eventToHook, indexOfDelegate);
+
+            this._registry[eventToHook].push(function () {
+                cancelation();
+                delegate(arguments);
+            });
         }
 
         public raise(eventToRaise: string, data: Object): void {
