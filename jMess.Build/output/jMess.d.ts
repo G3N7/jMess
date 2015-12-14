@@ -22,6 +22,7 @@ declare module jMess {
     interface IEventRegistry {
         getAvailableEvents(): string[];
         hook(eventName: string, onRaise: Function): () => void;
+        hookOnce(eventToHook: string, delegate: Function): any;
         raise(eventToRaise: string, data: Object): void;
         register(eventsToRegister: any): void;
     }
