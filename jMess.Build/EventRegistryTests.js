@@ -5,7 +5,9 @@ describe('EventRegistry', function () {
     var eventRegistry;
     var someKnownEvent = 'someEvent';
     beforeEach(function (done) {
-        eventRegistry = new jMess.EventRegistry(logR, function (eventBeingRaised, data) { console.log(eventBeingRaised, data); });
+        eventRegistry = new jMess.EventRegistry(logR, function (eventBeingRaised, data) {
+            console.log(eventBeingRaised, data);
+        });
         done();
     });
     describe('getAvailableEvents', function () {
@@ -24,21 +26,27 @@ describe('EventRegistry', function () {
         it('adds a string to the available events', function (done) {
             eventRegistry.register(someKnownEvent);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === someKnownEvent; })).toBeDefined();
+            expect(_.find(availableEvents, function (event) {
+                return event === someKnownEvent;
+            })).toBeDefined();
             done();
         });
         it('adds an objects values to the available events', function (done) {
             var eventsObj = { onlyEvent: someKnownEvent };
             eventRegistry.register(eventsObj);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === eventsObj.onlyEvent; })).toBeDefined();
+            expect(_.find(availableEvents, function (event) {
+                return event === eventsObj.onlyEvent;
+            })).toBeDefined();
             done();
         });
         it('adds an array of event name strings to the available events', function (done) {
             var eventsArray = ['someEvent'];
             eventRegistry.register(eventsArray);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === eventsArray[0]; })).toBeDefined();
+            expect(_.find(availableEvents, function (event) {
+                return event === eventsArray[0];
+            })).toBeDefined();
             done();
         });
     });
@@ -53,9 +61,18 @@ describe('EventRegistry', function () {
             someEventCalled = 0;
             someOtherEventCalled = false;
             canceledEventCalled = false;
-            eventRegistry.hook(someKnownEvent, function () { someEventCalled++; done(); });
-            eventRegistry.hook(someOtherKnownEvent, function () { someOtherEventCalled = true; done(); });
-            var cancelation = eventRegistry.hook(someKnownEvent, function () { canceledEventCalled = true; done(); });
+            eventRegistry.hook(someKnownEvent, function () {
+                someEventCalled++;
+                done();
+            });
+            eventRegistry.hook(someOtherKnownEvent, function () {
+                someOtherEventCalled = true;
+                done();
+            });
+            var cancelation = eventRegistry.hook(someKnownEvent, function () {
+                canceledEventCalled = true;
+                done();
+            });
             cancelation();
             eventRegistry.raise(someKnownEvent, {});
         });
@@ -83,8 +100,14 @@ describe('EventRegistry', function () {
             someEventCalled = 0;
             someOtherEventCalled = false;
             canceledEventCalled = false;
-            eventRegistry.hookOnce(someKnownEvent, function () { someEventCalled++; done(); });
-            eventRegistry.hookOnce(someOtherKnownEvent, function () { someOtherEventCalled = true; done(); });
+            eventRegistry.hookOnce(someKnownEvent, function () {
+                someEventCalled++;
+                done();
+            });
+            eventRegistry.hookOnce(someOtherKnownEvent, function () {
+                someOtherEventCalled = true;
+                done();
+            });
             eventRegistry.raise(someKnownEvent, {});
         });
         it('hookOnce will register a method that can be invoked later', function (done) {
