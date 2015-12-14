@@ -7,7 +7,9 @@ declare module jMess {
         private _onRaise;
         constructor(logR: ILogR, onRaise: (event: string, data: Object) => void, timeout?: (delegate: () => void, delay: number) => void);
         getAvailableEvents(): string[];
+        getHooksForEvent(eventName: string): Function[];
         hook(eventToHook: string, delegate: Function): () => void;
+        hookOnce(eventToHook: string, delegate: Function): void;
         raise(eventToRaise: string, data: Object): void;
         register(eventsToRegister: string | string[] | Object): void;
         private _registerEventsObject(eventsObj);

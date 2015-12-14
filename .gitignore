@@ -185,3 +185,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+jMess.Build/.vs/config/applicationhost.config
