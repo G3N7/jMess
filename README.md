@@ -28,7 +28,7 @@ getAvailableEvents(): string[]
 ```
 allows you to see all currently registered events, this is mostly used for diagnostics.
 
-###EventBarker
+## EventBarker
 A little logging tool to allow for a console log stream of the events passing through the system.  Simply tell it to 
 ```typescript
 startBarking()
