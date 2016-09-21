@@ -26,8 +26,6 @@
     <Content Include="Scripts\jasmine\jasmine-html.js" />
     <Content Include="Scripts\jasmine\jasmine.js" />
     <Content Include="Scripts\LogR.js" />
-    <Content Include="Scripts\underscore.js" />
-    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Tests.html" />
     <Content Include="web.config" />
   </ItemGroup>
@@ -39,12 +37,10 @@
     <TypeScriptCompile Include="IEventRegistry.ts" />
     <TypeScriptCompile Include="Scripts\LogR.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jasmine\jasmine.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\underscore\underscore.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="jMess.Build.nuspec" />
-    <Content Include="Scripts\underscore.min.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
