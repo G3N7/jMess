@@ -17,13 +17,12 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="Content\jasmine\jasmine.css" />
-    <Content Include="Content\jasmine\jasmine_favicon.png" />
     <Content Include="Scripts\jasmine\boot.js" />
-    <Content Include="Scripts\jasmine\console.js" />
     <Content Include="Scripts\jasmine\jasmine-html.js" />
     <Content Include="Scripts\jasmine\jasmine.js" />
     <Content Include="Scripts\LogR.js" />
