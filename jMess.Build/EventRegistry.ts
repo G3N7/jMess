@@ -16,7 +16,7 @@ module jMess {
         }
 
         public getAvailableEvents(): string[] {
-            var eventCopy = _.clone(this._events);
+            var eventCopy = JSON.parse(JSON.stringify(this._events));
             return _.values(eventCopy);
         }
 

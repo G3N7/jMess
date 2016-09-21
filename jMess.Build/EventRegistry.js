@@ -10,7 +10,7 @@ var jMess;
             this._timeout = timeout ? timeout : setTimeout;
         }
         EventRegistry.prototype.getAvailableEvents = function () {
-            var eventCopy = _.clone(this._events);
+            var eventCopy = JSON.parse(JSON.stringify(this._events));
             return _.values(eventCopy);
         };
         EventRegistry.prototype.getHooksForEvent = function (eventName) {
