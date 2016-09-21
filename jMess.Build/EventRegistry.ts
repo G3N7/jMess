@@ -34,7 +34,7 @@ module jMess {
                 var message = 'The event "' +
                     eventToHook +
                     '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' +
-                    _.map(availableEvents, x => '\n' + x);
+                    availableEvents.map(x => '\n' + x);
 
                 throw message;
             }
@@ -61,7 +61,7 @@ module jMess {
             if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
             if (!this._eventExists(eventToHook)) {
                 var availableEvents = this.getAvailableEvents();
-                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(availableEvents, x => '\n' + x);
+                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + availableEvents.map(x => '\n' + x);
                 throw message;
             }
 
@@ -91,7 +91,7 @@ module jMess {
             if (!this._eventExists(eventToRaise)) {
                 var availableEvents = this.getAvailableEvents();
 
-                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(availableEvents, x => '\n' + x);
+                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + availableEvents.map(x => '\n' + x);
 
                 throw message;
             }

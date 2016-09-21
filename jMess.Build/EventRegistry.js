@@ -27,7 +27,7 @@ var jMess;
                 var message = 'The event "' +
                     eventToHook +
                     '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' +
-                    _.map(availableEvents, function (x) { return '\n' + x; });
+                    availableEvents.map(function (x) { return '\n' + x; });
                 throw message;
             }
             this._logR.trace('Registering hook: ', eventToHook);
@@ -53,7 +53,7 @@ var jMess;
                 throw 'You must provide an delegate to run when the event is raised';
             if (!this._eventExists(eventToHook)) {
                 var availableEvents = this.getAvailableEvents();
-                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(availableEvents, function (x) { return '\n' + x; });
+                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + availableEvents.map(function (x) { return '\n' + x; });
                 throw message;
             }
             if (this._registry[eventToHook] == null) {
@@ -80,7 +80,7 @@ var jMess;
                 throw 'data was null, consumers of events should feel confident they will never get null data.';
             if (!this._eventExists(eventToRaise)) {
                 var availableEvents = this.getAvailableEvents();
-                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(availableEvents, function (x) { return '\n' + x; });
+                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + availableEvents.map(function (x) { return '\n' + x; });
                 throw message;
             }
             this._logR.info('Raise: ', eventToRaise, data);
