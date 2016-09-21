@@ -162,8 +162,9 @@ module jMess {
         }
 
         private _eventExists(eventName: string): boolean {
-            var values = Object.keys(this._events).map(key => this._events[key]);
-            return _.contains(values, eventName);
+            var availableEvents = this.getAvailableEvents();
+            var containsEvent = availableEvents.indexOf(eventName) > -1;
+            return containsEvent;
         }
     }
 }

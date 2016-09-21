@@ -147,9 +147,9 @@ var jMess;
             this._events[eventToRegister] = eventToRegister;
         };
         EventRegistry.prototype._eventExists = function (eventName) {
-            var _this = this;
-            var values = Object.keys(this._events).map(function (key) { return _this._events[key]; });
-            return _.contains(values, eventName);
+            var availableEvents = this.getAvailableEvents();
+            var containsEvent = availableEvents.indexOf(eventName) > -1;
+            return containsEvent;
         };
         return EventRegistry;
     }());
