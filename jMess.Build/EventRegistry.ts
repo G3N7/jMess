@@ -17,7 +17,8 @@ module jMess {
 
         public getAvailableEvents(): string[] {
             var eventCopy = JSON.parse(JSON.stringify(this._events));
-            return _.values(eventCopy);
+            var values = Object.keys(eventCopy).map(key => eventCopy[key]);
+            return values;
         }
 
         public getHooksForEvent(eventName: string): Function[] {
@@ -27,7 +28,16 @@ module jMess {
         public hook(eventToHook: string, delegate: Function): () => void {
             if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
             if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
-            if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
+            if (!this._eventExists(eventToHook)) {
+                var availableEvents = this.getAvailableEvents();
+
+                var message = 'The event "' +
+                    eventToHook +
+                    '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' +
+                    _.map(availableEvents, x => '\n' + x);
+
+                throw message;
+            }
 
             this._logR.trace('Registering hook: ', eventToHook);
 
@@ -49,7 +59,11 @@ module jMess {
         public hookOnce(eventToHook: string, delegate: Function) {
             if (eventToHook == null) throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
             if (delegate == null) throw 'You must provide an delegate to run when the event is raised';
-            if (!this._eventExists(eventToHook)) throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
+            if (!this._eventExists(eventToHook)) {
+                var availableEvents = this.getAvailableEvents();
+                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(availableEvents, x => '\n' + x);
+                throw message;
+            }
 
             if (this._registry[eventToHook] == null) {
                 this._registry[eventToHook] = new Array();
@@ -74,13 +88,19 @@ module jMess {
         public raise(eventToRaise: string, data: Object): void {
             if (eventToRaise == null) throw 'The event you provided to raise is null, are you sure you have defined the event?';
             if (data == null) throw 'data was null, consumers of events should feel confident they will never get null data.';
-            if (!this._eventExists(eventToRaise)) throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), x => '\n' + x);
+            if (!this._eventExists(eventToRaise)) {
+                var availableEvents = this.getAvailableEvents();
+
+                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(availableEvents, x => '\n' + x);
+
+                throw message;
+            }
 
             this._logR.info('Raise: ', eventToRaise, data);
 
             var asyncInvokation = (delegate) => {
                 var logr = this._logR;
-                this._timeout.call(window,() => {
+                this._timeout.call(window, () => {
                     try {
                         delegate(data);
                     } catch (ex) {
@@ -92,12 +112,12 @@ module jMess {
 
             var eventDelegates = this._registry[eventToRaise];
             _.each(eventDelegates, asyncInvokation);
-			this._timeout.call(window,() => {
-				this._onRaise(eventToRaise, data);
-			});
+            this._timeout.call(window, () => {
+                this._onRaise(eventToRaise, data);
+            });
         }
 
-        public register(eventsToRegister: string|string[]|Object): void {
+        public register(eventsToRegister: string | string[] | Object): void {
             if (eventsToRegister == null) throw 'Your events where null, we must have something';
 
             this._logR.trace('Register: ', eventsToRegister);
@@ -142,7 +162,8 @@ module jMess {
         }
 
         private _eventExists(eventName: string): boolean {
-            return _.contains(_.values(this._events), eventName);
+            var values = Object.keys(this._events).map(key => this._events[key]);
+            return _.contains(values, eventName);
         }
     }
 }

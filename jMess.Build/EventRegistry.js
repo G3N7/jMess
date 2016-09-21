@@ -11,7 +11,8 @@ var jMess;
         }
         EventRegistry.prototype.getAvailableEvents = function () {
             var eventCopy = JSON.parse(JSON.stringify(this._events));
-            return _.values(eventCopy);
+            var values = Object.keys(eventCopy).map(function (key) { return eventCopy[key]; });
+            return values;
         };
         EventRegistry.prototype.getHooksForEvent = function (eventName) {
             return this._registry[eventName];
@@ -21,8 +22,14 @@ var jMess;
                 throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
             if (delegate == null)
                 throw 'You must provide an delegate to run when the event is raised';
-            if (!this._eventExists(eventToHook))
-                throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), function (x) { return '\n' + x; });
+            if (!this._eventExists(eventToHook)) {
+                var availableEvents = this.getAvailableEvents();
+                var message = 'The event "' +
+                    eventToHook +
+                    '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' +
+                    _.map(availableEvents, function (x) { return '\n' + x; });
+                throw message;
+            }
             this._logR.trace('Registering hook: ', eventToHook);
             if (this._registry[eventToHook] == null) {
                 this._registry[eventToHook] = [delegate];
@@ -44,8 +51,11 @@ var jMess;
                 throw 'You must provide an event to hook, have you define the event object yet? "...oh you have to write the code! -Scott Hanselman"';
             if (delegate == null)
                 throw 'You must provide an delegate to run when the event is raised';
-            if (!this._eventExists(eventToHook))
-                throw 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(_.values(this._events), function (x) { return '\n' + x; });
+            if (!this._eventExists(eventToHook)) {
+                var availableEvents = this.getAvailableEvents();
+                var message = 'The event "' + eventToHook + '" your trying to hook to does not exist, make sure you have registered the events with the EventRegistry, the available events are ' + _.map(availableEvents, function (x) { return '\n' + x; });
+                throw message;
+            }
             if (this._registry[eventToHook] == null) {
                 this._registry[eventToHook] = new Array();
             }
@@ -68,8 +78,11 @@ var jMess;
                 throw 'The event you provided to raise is null, are you sure you have defined the event?';
             if (data == null)
                 throw 'data was null, consumers of events should feel confident they will never get null data.';
-            if (!this._eventExists(eventToRaise))
-                throw 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(_.values(this._events), function (x) { return '\n' + x; });
+            if (!this._eventExists(eventToRaise)) {
+                var availableEvents = this.getAvailableEvents();
+                var message = 'The event "' + eventToRaise + '" your trying to raise does not exist, make sure you have registered the event with the EventRegistry, the available events are ' + _.map(availableEvents, function (x) { return '\n' + x; });
+                throw message;
+            }
             this._logR.info('Raise: ', eventToRaise, data);
             var asyncInvokation = function (delegate) {
                 var logr = _this._logR;
@@ -134,7 +147,9 @@ var jMess;
             this._events[eventToRegister] = eventToRegister;
         };
         EventRegistry.prototype._eventExists = function (eventName) {
-            return _.contains(_.values(this._events), eventName);
+            var _this = this;
+            var values = Object.keys(this._events).map(function (key) { return _this._events[key]; });
+            return _.contains(values, eventName);
         };
         return EventRegistry;
     }());
