@@ -80,7 +80,7 @@
             done();
         });
 
-        it('hook will return a cancelation fuction that will remove the hook created.',(done) => {
+        it('hook will return a cancelation function that will remove the hook created.',(done) => {
             expect(canceledEventCalled).toBe(false);
             done();
         });

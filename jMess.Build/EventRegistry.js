@@ -137,7 +137,7 @@ var jMess;
             return _.contains(_.values(this._events), eventName);
         };
         return EventRegistry;
-    })();
+    }());
     jMess.EventRegistry = EventRegistry;
 })(jMess || (jMess = {}));
 //# sourceMappingURL=EventRegistry.js.map
