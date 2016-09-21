@@ -1,30 +1,38 @@
-﻿<h1>jMess</h1>
-
+﻿<h1 id="jmess">jMess</h1>
 <p>A simple event driven messaging framework for javascript.</p>
-
-<h2>Components</h2>
-
-<h3>EventRegistry</h3>
-
+<h2 id="eventregistry">EventRegistry</h2>
 <p>This is the heart of the system, it allows you to raise and hook to events while passing messages through your system.</p>
-
-<ul>
-<li><code>hook(eventName: string, onRaise: Function): () =&gt; void</code> - will register a delegate to be invoked upon raising the event and then return a cancelation function that can be called to remove the hook that was just registered.</li>
-<li><code>raise(eventToRaise: string, data: Object): void</code> - will raise an event passing the expected data along to each of the delegates registered to the event.</li>
-<li><code>register(eventsToRegister: string/Object/string[]): void</code> - allows you to register events, although this step may seem unnecessary i have found it very useful in diagnosing typos in event names.</li>
-<li><code>getAvailableEvents(): string[]</code> - allows you to see all currently registered events, this is mostly used for diagnostics.</li>
-</ul>
-
-<h3>EventBarker</h3>
-
-<p>A little logging tool to allow for a console log stream of the events passing through the system.  Simply tell it to <code>startBarking()</code></p>
-
-<h3>LifeCycleEvents</h3>
-
+<hr />
+<pre><code class="language-typescript">hook(eventName: string, onRaise: Function): () =&gt; void
+</code></pre>
+<p>will register a delegate to be invoked upon raising the event and then return a cancelation function that can be called to remove the hook that was just registered.</p>
+<hr />
+<pre><code class="language-typescript">raise(eventToRaise: string, data: Object): void
+</code></pre>
+<p>will raise an event passing the expected data along to each of the delegates registered to the event.</p>
+<hr />
+<pre><code class="language-typescript">register(eventsToRegister: string/Object/string[]): void
+</code></pre>
+<p>allows you to register events, although this step may seem unnecessary i have found it very useful in diagnosing typos in event names.</p>
+<hr />
+<pre><code class="language-typescript">getAvailableEvents(): string[]
+</code></pre>
+<p>allows you to see all currently registered events, this is mostly used for diagnostics.</p>
+<p>###EventBarker
+A little logging tool to allow for a console log stream of the events passing through the system.  Simply tell it to</p>
+<pre><code class="language-typescript">startBarking()
+</code></pre>
+<h2 id="lifecycleevents">LifeCycleEvents</h2>
 <p>These events give you access points to have logic run across all commands at different points in the life cycle.</p>
-
-<h2>About the project</h2>
-
+<h2 id="release-notes">Release Notes</h2>
+<h3 id="section">3.0</h3>
+<p>This we have removed the dependency on underscore, this has a few effects:</p>
+<ul>
+<li>We are now using <code>Array.prototype.map()</code>, <code>Array.prototype.indexOf</code>, and <code>Object.keys</code>.  Consult <a href="http://caniuse.com/#feat=es5">Can I Use, ES5</a> for compatibility</li>
+<li>You can now choose how you reference underscore, should you choose too.</li>
+<li>Removes a heafty dependency in simple scenarios.</li>
+</ul>
+<h2 id="about-the-project">About the project</h2>
 <ul>
 <li>Our project is written in typescript but compiled to target ECMAScript v5.</li>
 <li>Currently depends on Underscore.js for some utilities with a terse syntax, as needed the project can be migrated off of it.</li>
