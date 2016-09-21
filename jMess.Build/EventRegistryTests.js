@@ -24,21 +24,21 @@ describe('EventRegistry', function () {
         it('adds a string to the available events', function (done) {
             eventRegistry.register(someKnownEvent);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === someKnownEvent; })).toBeDefined();
+            expect(availableEvents.filter(function (event) { return event === someKnownEvent; })).toBeDefined();
             done();
         });
         it('adds an objects values to the available events', function (done) {
             var eventsObj = { onlyEvent: someKnownEvent };
             eventRegistry.register(eventsObj);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === eventsObj.onlyEvent; })).toBeDefined();
+            expect(availableEvents.filter(function (event) { return event === eventsObj.onlyEvent; })).toBeDefined();
             done();
         });
         it('adds an array of event name strings to the available events', function (done) {
             var eventsArray = ['someEvent'];
             eventRegistry.register(eventsArray);
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents, function (event) { return event === eventsArray[0]; })).toBeDefined();
+            expect(availableEvents.filter(function (event) { return event === eventsArray[0]; })).toBeDefined();
             done();
         });
     });

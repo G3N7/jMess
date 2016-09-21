@@ -28,7 +28,7 @@
             eventRegistry.register(someKnownEvent);
 
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents,(event) => { return event === someKnownEvent; })).toBeDefined();
+            expect(availableEvents.filter((event) => { return event === someKnownEvent; })).toBeDefined();
             done();
         });
 
@@ -38,7 +38,7 @@
             eventRegistry.register(eventsObj);
 
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents,(event) => { return event === eventsObj.onlyEvent; })).toBeDefined();
+            expect(availableEvents.filter((event) => { return event === eventsObj.onlyEvent; })).toBeDefined();
             done();
         });
 
@@ -48,7 +48,7 @@
             eventRegistry.register(eventsArray);
 
             var availableEvents = eventRegistry.getAvailableEvents();
-            expect(_.find(availableEvents,(event) => { return event === eventsArray[0]; })).toBeDefined();
+            expect(availableEvents.filter((event) => { return event === eventsArray[0]; })).toBeDefined();
             done();
         });
     });
