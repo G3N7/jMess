@@ -111,7 +111,11 @@ module jMess {
             };
 
             var eventDelegates = this._registry[eventToRaise];
-            _.each(eventDelegates, asyncInvokation);
+
+            for (var i = 0; i < eventDelegates.length; i++) {
+                asyncInvokation(eventDelegates[i]);
+            }
+
             this._timeout.call(window, () => {
                 this._onRaise(eventToRaise, data);
             });

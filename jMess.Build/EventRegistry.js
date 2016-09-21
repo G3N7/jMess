@@ -96,7 +96,9 @@ var jMess;
                 }, 100);
             };
             var eventDelegates = this._registry[eventToRaise];
-            _.each(eventDelegates, asyncInvokation);
+            for (var i = 0; i < eventDelegates.length; i++) {
+                asyncInvokation(eventDelegates[i]);
+            }
             this._timeout.call(window, function () {
                 _this._onRaise(eventToRaise, data);
             });
